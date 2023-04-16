@@ -10,10 +10,10 @@ class AdvancedClassificationModel:
         Initialize the AdvancedClassificationModel object by defining the data augmentation, adaptive training strategy, base classifier, self-supervised learning, and ensemble classifier.
 
         Input:
-        - num_classifiers: the number of classifiers to be used in the ensemble learning
+        @param - num_classifiers: the number of classifiers to be used in the ensemble learning
 
         Output:
-        - None
+        @return - None
         """
         self.data_augmentation = DataAugmentation()
         self.adaptive_training_strategy = AdaptiveTrainingStrategy()
@@ -26,14 +26,14 @@ class AdvancedClassificationModel:
         Train the advanced classification model using the ensemble of classifiers.
 
         Input:
-        - data_loader: the input data loader for training the model
-        - device: the device to be used for training
-        - epochs: the number of epochs for training
-        - learning_rate: the learning rate for training
-        - weight_decay: the weight decay for training
+        @param - data_loader: the input data loader for training the model
+        @param - device: the device to be used for training
+        @param - epochs: the number of epochs for training
+        @param - learning_rate: the learning rate for training
+        @param - weight_decay: the weight decay for training
 
         Output:
-        - None
+        @return - None
         """
         # Pretrain using self-supervised learning
         self.self_supervised_learning.pretrain(self.base_classifier, data_loader)
@@ -46,10 +46,10 @@ class AdvancedClassificationModel:
         Make predictions using the ensemble of classifiers.
 
         Input:
-        - data: the input data to be classified
+        @param - data: the input data to be classified
 
         Output:
-        - the predicted class labels
+        @return - the predicted class labels
         """
         # Make predictions using the ensemble of classifiers
         return self.ensemble_classifier.predict(data)
@@ -59,10 +59,10 @@ class AdvancedClassificationModel:
         Apply data augmentation to the input data.
 
         Input:
-        - data: the input data to be augmented
+        @param - data: the input data to be augmented
 
         Output:
-        - the augmented data
+        @return - the augmented data
         """
         # Apply data augmentation to the input data
         return self.data_augmentation.apply(data)
@@ -72,12 +72,12 @@ class AdvancedClassificationModel:
         Select the best strategy for training the model given the data and device.
 
         Input:
-        - model: the input model to be trained
-        - data_loader: the input data loader for training the model
-        - device: the device to be used for training
+        @param - model: the input model to be trained
+        @param - data_loader: the input data loader for training the model
+        @param - device: the device to be used for training
 
         Output:
-        - the selected training strategy
+        @return - the selected training strategy
         """
         # Select the best strategy for training the model given the data and device
         return self.adaptive_training_strategy.select_strategy(model, data_loader, device)

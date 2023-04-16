@@ -8,12 +8,12 @@ class EnsembleClassifier:
         Initialize the EnsembleClassifier object by defining the number of classifiers, the base classifier, and the number of classes.
 
         Input:
-        - num_classifiers: the number of classifiers to be used in the ensemble
-        - base_classifier: the base classifier to be used in the ensemble
-        - num_classes: the number of classes to be classified
+        @param - num_classifiers: the number of classifiers to be used in the ensemble
+        @param - base_classifier: the base classifier to be used in the ensemble
+        @param - num_classes: the number of classes to be classified
 
         Output:
-        - None
+        @return - None
         """
         self.num_classifiers = num_classifiers
         self.classifiers = [copy.deepcopy(base_classifier) for _ in range(num_classifiers)]
@@ -24,14 +24,14 @@ class EnsembleClassifier:
         Train the ensemble of classifiers.
 
         Input:
-        - data_loader: the input data loader for training the ensemble
-        - device: the device to be used for training
-        - epochs: the number of epochs for training
-        - learning_rate: the learning rate for training
-        - weight_decay: the weight decay for training
+        @param - data_loader: the input data loader for training the ensemble
+        @param - device: the device to be used for training
+        @param - epochs: the number of epochs for training
+        @param - learning_rate: the learning rate for training
+        @param - weight_decay: the weight decay for training
 
         Output:
-        - None
+        @return - None
         """
         for i, classifier in enumerate(self.classifiers):
             classifier.to(device)
@@ -58,10 +58,10 @@ class EnsembleClassifier:
         Make predictions using the ensemble of classifiers.
 
         Input:
-        - data: the input data to be classified
+        @param - data: the input data to be classified
 
         Output:
-        - the predicted class labels
+        @return - the predicted class labels
         """
         predictions = torch.zeros((len(data), self.num_classes))
         for classifier in self.classifiers:

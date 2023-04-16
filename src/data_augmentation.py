@@ -7,10 +7,10 @@ class DataAugmentation:
         Initialize the DataAugmentation object by defining the list of data augmentation techniques to be used.
 
         Input:
-        - None
+        @param - None
 
         Output:
-        - None
+        @return - None
         """
         # Define data augmentation strategies here
         self.transformations = transforms.Compose([
@@ -32,10 +32,10 @@ class DataAugmentation:
         Get the attribute from the transformations if it exists.
 
         Input:
-        - name: the name of the attribute to be retrieved
+        @param - name: the name of the attribute to be retrieved
 
         Output:
-        - the attribute if it exists, otherwise raise an AttributeError
+        @return - the attribute if it exists, otherwise raise an AttributeError
         """
         if hasattr(self.transformations, name):
             return getattr(self.transformations, name)
@@ -46,10 +46,10 @@ class DataAugmentation:
         Apply the data augmentation techniques to the input data.
 
         Input:
-        - data: the input data to be augmented
+        @param - data: the input data to be augmented
 
         Output:
-        - the augmented data
+        @return - the augmented data
         """
         # Call the apply method when the instance is called as a function
         return self.apply(data)
@@ -59,10 +59,10 @@ class DataAugmentation:
         Apply the data augmentation techniques to the input data.
 
         Input:
-        - data: the input data to be augmented
+        @param - data: the input data to be augmented
 
         Output:
-        - the augmented data
+        @return - the augmented data
         """
         # Apply data augmentation to the input data
         return self.transformations(data)

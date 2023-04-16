@@ -7,10 +7,10 @@ class BaseClassifier(nn.Module):
         Initialize the BaseClassifier object by defining the layers of the neural network.
 
         Input:
-        - num_classes: the number of classes to be classified
+        @param - num_classes: the number of classes to be classified
 
         Output:
-        - None
+        @return - None
         """
         super(BaseClassifier, self).__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
@@ -32,10 +32,10 @@ class BaseClassifier(nn.Module):
         Forward pass of the neural network.
 
         Input:
-        - x: the input data
+        @param  - x: the input data
 
         Output:
-        - the output of the neural network
+        @return - the output of the neural network
         """
         x = self.conv1(x)
         x = self.bn1(x)

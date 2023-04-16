@@ -7,10 +7,10 @@ class SimCLR:
         Initialize the SimCLR object by defining the temperature hyperparameter.
 
         Input:
-        - temperature: the temperature hyperparameter
+        @param - temperature: the temperature hyperparameter
 
         Output:
-        - None
+        @return - None
         """
         self.temperature = temperature
 
@@ -19,11 +19,11 @@ class SimCLR:
         Calculate the contrastive loss between two sets of embeddings.
 
         Input:
-        - z_i: the embeddings of the first set
-        - z_j: the embeddings of the second set
+        @param - z_i: the embeddings of the first set
+        @param - z_j: the embeddings of the second set
 
         Output:
-        - the contrastive loss
+        @return - the contrastive loss
         """
         batch_size = z_i.size(0)
         z = torch.cat((z_i, z_j), dim=0)
@@ -42,11 +42,11 @@ class SimCLR:
         Calculate the contrastive loss between two sets of embeddings.
 
         Input:
-        - z_i: the embeddings of the first set
-        - z_j: the embeddings of the second set
+        @param - z_i: the embeddings of the first set
+        @param - z_j: the embeddings of the second set
 
         Output:
-        - the contrastive loss
+        @return - the contrastive loss
         """
         return self.loss(z_i, z_j)
 
@@ -55,10 +55,10 @@ class SimCLR:
         Get the attribute from the class if it exists.
 
         Input:
-        - name: the name of the attribute
+        @param - name: the name of the attribute
 
         Output:
-        - the attribute
+        @return - the attribute
         """
         return getattr(self.simclr, name)
 
@@ -69,12 +69,12 @@ class SelfSupervisedLearning:
         Initialize the SelfSupervisedLearning object by defining the SSL framework, data augmentation, and projection head.
 
         Input:
-        - ssl_framework: the SSL framework to be used
-        - data_augmentation: the data augmentation to be used
-        - projection_head: the projection head to be used
+        @param - ssl_framework: the SSL framework to be used
+        @param - data_augmentation: the data augmentation to be used
+        @param - projection_head: the projection head to be used
 
         Output:
-        - None
+        @return - None
         """
         self.ssl_framework = ssl_framework
         self.data_augmentation = data_augmentation
@@ -85,14 +85,14 @@ class SelfSupervisedLearning:
         Pretrain the model using self-supervised learning.
 
         Input:
-        - model: the model to be pretrained
-        - data_loader: the input data loader for pretraining
-        - device: the device to be used for pretraining
-        - epochs: the number of epochs for pretraining
-        - optimizer: the optimizer for pretraining
+        @param - model: the model to be pretrained
+        @param - data_loader: the input data loader for pretraining
+        @param - device: the device to be used for pretraining
+        @param - epochs: the number of epochs for pretraining
+        @param - optimizer: the optimizer for pretraining
 
         Output:
-        - None
+        @return - None
         """
         model = model.to(device)
         self.projection_head = self.projection_head.to(device)

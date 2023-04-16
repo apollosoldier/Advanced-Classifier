@@ -6,14 +6,14 @@ class TrainingStrategy1:
         Apply the first training strategy to the input model given the data and device.
 
         Input:
-        - model: the input model to be trained
-        - data_loader: the input data loader for training the model
-        - device: the device to be used for training
-        - optimizer: the optimizer to be used for training
-        - criterion: the loss function to be used for training
+        @param - model: the input model to be trained
+        @param - data_loader: the input data loader for training the model
+        @param - device: the device to be used for training
+        @param - optimizer: the optimizer to be used for training
+        @param - criterion: the loss function to be used for training
 
         Output:
-        - the average loss per batch during training
+        @return - the average loss per batch during training
     """
     def apply(self, model, data_loader, device, optimizer, criterion):
         model.train()
@@ -38,14 +38,14 @@ class TrainingStrategy2:
             Apply the second training strategy to the input model given the data and device.
 
             Input:
-            - model: the input model to be trained
-            - data_loader: the input data loader for training the model
-            - device: the device to be used for training
-            - optimizer: the optimizer to be used for training
-            - criterion: the loss function to be used for training
+            @param - model: the input model to be trained
+            @param - data_loader: the input data loader for training the model
+            @param - device: the device to be used for training
+            @param - optimizer: the optimizer to be used for training
+            @param - criterion: the loss function to be used for training
 
             Output:
-            - the average loss per batch during training
+            @return - the average loss per batch during training
         """
     def apply(self, model, data_loader, device, optimizer, criterion):
         model.train()
@@ -72,10 +72,10 @@ class AdaptiveTrainingStrategy:
             Initialize the AdaptiveTrainingStrategy object by defining the list of training strategies to be used, their metric history, and the last selected strategy.
 
             Input:
-            - None
+            @param - None
 
             Output:
-            - None
+            @return - None
         """
     def __init__(self):
         self.strategies = {
@@ -93,12 +93,12 @@ class AdaptiveTrainingStrategy:
             Select the best strategy for training the model given the data and device.
 
             Input:
-            - model: the input model to be trained
-            - data_loader: the input data loader for training the model
-            - device: the device to be used for training
+            @param - model: the input model to be trained
+            @param - data_loader: the input data loader for training the model
+            @param - device: the device to be used for training
 
             Output:
-            - the selected training strategy
+            @return - the selected training strategy
         """
         if self.last_selected_strategy is None:
             # If no strategy has been selected before, start with 'strategy1'
@@ -119,15 +119,15 @@ class AdaptiveTrainingStrategy:
             Apply the selected training strategy to the model.
 
             Input:
-            - selected_strategy: the selected training strategy
-            - model: the input model to be trained
-            - data_loader: the input data loader for training the model
-            - device: the device to be used for training
-            - optimizer: the optimizer to be used for training
-            - criterion: the loss function to be used for training
+            @param - selected_strategy: the selected training strategy
+            @param - model: the input model to be trained
+            @param - data_loader: the input data loader for training the model
+            @param - device: the device to be used for training
+            @param - optimizer: the optimizer to be used for training
+            @param - criterion: the loss function to be used for training
 
             Output:
-            - None
+           @return  - None
         """
         strategy = self.strategies[selected_strategy]
         strategy.apply(model, data_loader, device, optimizer, criterion)
@@ -138,11 +138,11 @@ class AdaptiveTrainingStrategy:
             Update the metric history of the selected training strategy.
 
             Input:
-            - selected_strategy: the selected training strategy
-            - metric_value: the value of the metric to be updated
+            @param - selected_strategy: the selected training strategy
+            @param - metric_value: the value of the metric to be updated
 
             Output:
-            - None
+            @return - None
         """
         self.metric_history[selected_strategy].append(metric_value)
 
@@ -151,11 +151,11 @@ class AdaptiveTrainingStrategy:
             Adjust the learning rate of the optimizer based on the validation loss.
 
             Input:
-            - optimizer: the optimizer to be used for training
-            - validation_loss: the validation loss of the current epoch
+            @param - optimizer: the optimizer to be used for training
+            @param - validation_loss: the validation loss of the current epoch
 
             Output:
-            - None
+           @return  - None
         """
         scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=10, verbose=True)
         scheduler.step(validation_loss)
@@ -165,15 +165,15 @@ class AdaptiveTrainingStrategy:
             Apply the adaptive training strategy to the model.
 
             Input:
-            - model: the input model to be trained
-            - data_loader: the input data loader for training the model
-            - device: the device to be used for training
-            - optimizer: the optimizer to be used for training
-            - criterion: the loss function to be used for training
-            - validation_loss: the validation loss of the current epoch
+            @param - model: the input model to be trained
+            @param - data_loader: the input data loader for training the model
+            @param - device: the device to be used for training
+            @param - optimizer: the optimizer to be used for training
+            @param - criterion: the loss function to be used for training
+            @param - validation_loss: the validation loss of the current epoch
 
             Output:
-            - None
+            @return - None
         """
         selected_strategy = self.select_strategy(model, data_loader, device)
         self.apply_selected_strategy(selected_strategy, model, data_loader, device, optimizer, criterion)
