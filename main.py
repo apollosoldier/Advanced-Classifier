@@ -3,8 +3,8 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 
-from .src.advanced_classification_model import AdvancedClassificationModel
-from .src.data_augmentation import DataAugmentation
+from src.advanced_classification_model import AdvancedClassificationModel
+from src.data_augmentation import DataAugmentation
 
 def main():
 
@@ -39,7 +39,7 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
 
     # Initialize the advanced classification model
-    model = AdvancedClassificationModel(num_classifiers=num_classifiers, num_classes=num_classes)
+    model = AdvancedClassificationModel(num_classifiers=num_classifiers, num_classes=10)
 
     # Train the model
     model.train(train_loader, device, epochs, learning_rate, weight_decay)

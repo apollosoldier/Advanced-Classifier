@@ -33,20 +33,19 @@ class TrainingStrategy1:
         return running_loss / (i + 1)
 
 class TrainingStrategy2:
+    """
+        Apply the second training strategy to the input model given the data and device.
 
-        """
-            Apply the second training strategy to the input model given the data and device.
+        Input:
+        @param - model: the input model to be trained
+        @param - data_loader: the input data loader for training the model
+        @param - device: the device to be used for training
+        @param - optimizer: the optimizer to be used for training
+        @param - criterion: the loss function to be used for training
 
-            Input:
-            @param - model: the input model to be trained
-            @param - data_loader: the input data loader for training the model
-            @param - device: the device to be used for training
-            @param - optimizer: the optimizer to be used for training
-            @param - criterion: the loss function to be used for training
-
-            Output:
-            @return - the average loss per batch during training
-        """
+        Output:
+        @return - the average loss per batch during training
+    """
     def apply(self, model, data_loader, device, optimizer, criterion):
         model.train()
         running_loss = 0.0
@@ -66,17 +65,17 @@ class TrainingStrategy2:
 
         return running_loss / (i + 1)
 
-
 class AdaptiveTrainingStrategy:
-       """
-            Initialize the AdaptiveTrainingStrategy object by defining the list of training strategies to be used, their metric history, and the last selected strategy.
+    """
+        Initialize the AdaptiveTrainingStrategy object by defining the list of training strategies to be used, their metric history, and the last selected strategy.
 
-            Input:
-            @param - None
+        Input:
+        @param - None
 
-            Output:
-            @return - None
-        """
+        Output:
+        @return - None
+    """
+
     def __init__(self):
         self.strategies = {
             'strategy1': TrainingStrategy1(),
@@ -104,6 +103,8 @@ class AdaptiveTrainingStrategy:
             # If no strategy has been selected before, start with 'strategy1'
             return 'strategy1'
         else:
+            # Compare the performance of both strategies based on their
+
             # Compare the performance of both strategies based on their metric history
             avg_performance1 = sum(self.metric_history['strategy1']) / len(self.metric_history['strategy1'])
             avg_performance2 = sum(self.metric_history['strategy2']) / len(self.metric_history['strategy2'])

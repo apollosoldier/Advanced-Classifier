@@ -1,5 +1,6 @@
 import torch
 import torch.nn.functional as F
+import torch.optim as optim
 
 class SimCLR:
     def __init__(self, temperature=0.5):
@@ -122,3 +123,11 @@ class SelfSupervisedLearning:
                 # Backpropagation and optimization
                 loss.backward()
                 optimizer.step()
+                
+class ProjectionHead(torch.nn.Module):
+    def __init__(self, input_size, output_size):
+        super(ProjectionHead, self).__init__()
+        self.linear = torch.nn.Linear(input_size, output_size)
+
+    def forward(self, x):
+        return self.linear(x)

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class BaseClassifier(nn.Module):
-    def __init__(self, num_classes):
+    def __init__(self, num_classes= 10):
         """
         Initialize the BaseClassifier object by defining the layers of the neural network.
 
