@@ -127,7 +127,9 @@ class SelfSupervisedLearning:
 class ProjectionHead(torch.nn.Module):
     def __init__(self, input_size, output_size):
         super(ProjectionHead, self).__init__()
-        self.linear = torch.nn.Linear(input_size, output_size)
+        #self.linear = torch.nn.Linear(input_size, output_size)
+        self.linear = torch.nn.Linear(10, 128)
+
 
     def forward(self, x):
         return self.linear(x)
