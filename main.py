@@ -2,13 +2,11 @@ import torch
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
-
 from src.advanced_classification_model import AdvancedClassificationModel
 from src.data_augmentation import DataAugmentation
 
-
+import timm
 from torchvision.transforms import ToPILImage
-
 
 def main():
 
@@ -20,24 +18,21 @@ def main():
     learning_rate = 0.001
     weight_decay = 1e-5
 
-
     data_augmentation = DataAugmentation()
-
 
     transform_train = transforms.Compose([
         transforms.RandomHorizontalFlip(),
         transforms.RandomCrop(32, padding=4),
+        transforms.Resize((224, 224)), # Resize for EfficientNet-b0
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
-
 
     transform_test = transforms.Compose([
+        transforms.Resize((224, 224)), # Resize for EfficientNet-b0
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
-
-
 
     # CIFAR-10 dataset
     train_dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
@@ -47,7 +42,10 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
 
     # Initialize the advanced classification model
-    model = AdvancedClassificationModel(num_classifiers=num_classifiers, num_classes=10)
+    model = AdvancedClassificationModel(num_classifiers=num_classifiers, num_classes=10, temperature=0.5)
+
+    # Update the base classifier to use EfficientNet-b0
+    model.base_classifier = timm.create_model('tf_efficientnet_b0_ns', pretrained=True, num_classes=num_classes)
 
     # Train the model
     model.train(train_loader, device, epochs, learning_rate, weight_decay)
@@ -68,7 +66,4 @@ def main():
     print(f'Accuracy of the model on the 10000 test images: {100 * correct / total}%')
 
 if __name__ == '__main__':
-    #import warnings
-    #warnings.simplefilter(action='ignore', category=UserWarning)
-
     main()
