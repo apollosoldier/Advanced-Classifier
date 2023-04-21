@@ -1,6 +1,6 @@
 import random
 from torchvision import transforms
-
+import torch
 class DataAugmentation:
     def __init__(self):
         """
@@ -14,6 +14,7 @@ class DataAugmentation:
         """
         # Define data augmentation strategies here
         self.transformations = transforms.Compose([
+            transforms.ToPILImage(),
             transforms.RandomHorizontalFlip(),    # Flip the input image horizontally with a probability of 0.5
             transforms.RandomVerticalFlip(),      # Flip the input image vertically with a probability of 0.5
             transforms.RandomRotation(degrees=15),# Rotate the input image randomly by an angle between -15 to 15 degrees
@@ -64,5 +65,15 @@ class DataAugmentation:
         Output:
         @return - the augmented data
         """
-        # Apply data augmentation to the input data
-        return self.transformations(data)
+        # Check if the input data is a batch (4D) or a single image (3D)
+        if data.dim() == 4:
+            # If it's a batch, iterate over each image and apply the transformations
+            batch_size, channels, height, width = data.size()
+            transformed_data = torch.zeros_like(data)
+            for i in range(batch_size):
+                transformed_data[i] = self.transformations(data[i])
+            return transformed_data
+        else:
+            # If it's a single image, apply the transformations directly
+            return self.transformations(data)
+
