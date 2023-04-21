@@ -93,18 +93,23 @@ class SelfSupervisedLearning:
         @param - optimizer: the optimizer for pretraining
 
         Output:
-        @return - None
+        @return - metrics: a dictionary containing loss, accuracy, and MSE for the current epoch
         """
         model = model.to(device)
         self.projection_head = self.projection_head.to(device)
+
+        total_loss = 0
+        total_samples = 0
+        correct_predictions = 0
+        mse = 0
 
         for epoch in range(epochs):
             model.train()
             self.projection_head.train()
 
-            for data, _ in data_loader:
+            for data, target in data_loader:
                 optimizer.zero_grad()
-                
+
                 # Apply data augmentation to the same image twice
                 x_i = self.data_augmentation.apply(data).to(device)
                 x_j = self.data_augmentation.apply(data).to(device)
@@ -123,12 +128,25 @@ class SelfSupervisedLearning:
                 # Backpropagation and optimization
                 loss.backward()
                 optimizer.step()
+
+                # Update metrics
+                total_loss += loss.item() * data.size(0)
+                total_samples += data.size(0)
+                correct_predictions += (z_i.argmax(1) == z_j.argmax(1)).sum().item()
+                mse += torch.mean((z_i - z_j) ** 2).item()
+
+        metrics = {
+            'loss': total_loss / total_samples,
+            'accuracy': correct_predictions / total_samples,
+            'mse': mse / len(data_loader)
+        }
+
+        return metrics
                 
 class ProjectionHead(torch.nn.Module):
     def __init__(self, input_size, output_size):
         super(ProjectionHead, self).__init__()
-        #self.linear = torch.nn.Linear(input_size, output_size)
-        self.linear = torch.nn.Linear(10, 128)
+        self.linear = torch.nn.Linear(input_size, output_size)
 
 
     def forward(self, x):
