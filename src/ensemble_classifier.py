@@ -31,15 +31,26 @@ class EnsembleClassifier:
         @param - weight_decay: the weight decay for training
 
         Output:
-        @return - None
+        @return - metrics: a list of dictionaries containing loss and accuracy for each classifier in the ensemble
         """
+        metrics = []
+
         for i, classifier in enumerate(self.classifiers):
             classifier.to(device)
             optimizer = optim.Adam(classifier.parameters(), lr=learning_rate, weight_decay=weight_decay)
             criterion = torch.nn.CrossEntropyLoss()
 
+            classifier_metrics = {
+                'loss': [],
+                'accuracy': []
+            }
+
             for epoch in range(epochs):
                 classifier.train()
+                total_loss = 0
+                total_samples = 0
+                correct_predictions = 0
+
                 for inputs, labels in data_loader:
                     inputs, labels = inputs.to(device), labels.to(device)
 
@@ -51,7 +62,19 @@ class EnsembleClassifier:
                     loss.backward()
                     optimizer.step()
 
+                    # Update metrics
+                    total_loss += loss.item() * inputs.size(0)
+                    total_samples += inputs.size(0)
+                    correct_predictions += (outputs.argmax(1) == labels).sum().item()
+
+                classifier_metrics['loss'].append(total_loss / total_samples)
+                classifier_metrics['accuracy'].append(correct_predictions / total_samples)
+
             self.classifiers[i] = classifier.cpu()
+            metrics.append(classifier_metrics)
+
+        return metrics
+
 
     def predict(self, data):
         """
