@@ -12,8 +12,8 @@ This project implements an advanced classification model using an ensemble of de
 
 
 - **base_classifier.py**: Contains the BaseClassifier class, which defines the base classifier architecture used in the ensemble.
-data_augmentation.py: Contains the DataAugmentation class, which defines data augmentation strategies for the input images.
-self_supervised_learning.py: Contains the SelfSupervisedLearning class, which implements a self-supervised learning framework (e.g., SimCLR) for pretraining the base classifier.
+- **data_augmentation.py**: Contains the DataAugmentation class, which defines data augmentation strategies for the input images.
+- **self_supervised_learning.py**: Contains the SelfSupervisedLearning class, which implements a self-supervised learning framework (e.g., SimCLR) for pretraining the base classifier.
 
 - **ensemble_classifier.py**: Contains the EnsembleClassifier class, which trains an ensemble of classifiers using the base classifier architecture.
 
