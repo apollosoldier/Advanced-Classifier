@@ -46,10 +46,19 @@ class AdvancedClassificationModel:
         model = resnet18(pretrained=False, num_classes=10)
         optimizer = optim.Adam(list(model.parameters()) + list(self.projection_head.parameters()), lr=3e-4)
 
-        self.self_supervised_learning.pretrain(self.base_classifier, data_loader, device, epochs, optimizer)
+        print("Starting self-supervised pretraining...")
+        for epoch in range(epochs):
+            print(f"Epoch {epoch + 1}/{epochs}")
+            self.self_supervised_learning.pretrain(self.base_classifier, data_loader, device, 1, optimizer)
+        print("Self-supervised pretraining completed.")
 
         # Train the ensemble of classifiers
-        self.ensemble_classifier.train(data_loader, device, epochs, learning_rate, weight_decay)
+        print("Starting ensemble classifier training...")
+        for epoch in range(epochs):
+            print(f"Epoch {epoch + 1}/{epochs}")
+            self.ensemble_classifier.train(data_loader, device, 1, learning_rate, weight_decay)
+        print("Ensemble classifier training completed.")
+
 
     def predict(self, data):
         """
