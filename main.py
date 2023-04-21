@@ -6,6 +6,10 @@ from torch.utils.data import DataLoader
 from src.advanced_classification_model import AdvancedClassificationModel
 from src.data_augmentation import DataAugmentation
 
+
+from torchvision.transforms import ToPILImage
+
+
 def main():
 
     num_classifiers = 5
@@ -18,6 +22,8 @@ def main():
 
 
     data_augmentation = DataAugmentation()
+
+
     transform_train = transforms.Compose([
         transforms.RandomHorizontalFlip(),
         transforms.RandomCrop(32, padding=4),
@@ -30,6 +36,8 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
+
+
 
     # CIFAR-10 dataset
     train_dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
@@ -60,4 +68,7 @@ def main():
     print(f'Accuracy of the model on the 10000 test images: {100 * correct / total}%')
 
 if __name__ == '__main__':
+    #import warnings
+    #warnings.simplefilter(action='ignore', category=UserWarning)
+
     main()
