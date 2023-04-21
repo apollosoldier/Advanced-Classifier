@@ -4,10 +4,12 @@ from src.base_classifier import BaseClassifier
 from src.self_supervised_learning import SelfSupervisedLearning, SimCLR, ProjectionHead
 from src.ensemble_classifier import EnsembleClassifier
 import torch.optim as optim
-from torchvision.models import resnet18
+import torch
+import torch.nn as nn
+from torchvision.models import resnet18, resnet101
 
 class AdvancedClassificationModel:
-    def __init__(self, num_classifiers=5,num_classes = 10):
+    def __init__(self, num_classifiers=5, num_classes=10, temperature):
         """
         Initialize the AdvancedClassificationModel object by defining the data augmentation, adaptive training strategy, base classifier, self-supervised learning, and ensemble classifier.
 
@@ -21,12 +23,14 @@ class AdvancedClassificationModel:
         self.data_augmentation = DataAugmentation()
         self.adaptive_training_strategy = AdaptiveTrainingStrategy()
         self.base_classifier = BaseClassifier(self.num_classes)
-        self.simclr_framework = SimCLR(temperature=0.5)
-        self.projection_head = ProjectionHead(512, 128)
+        self.simclr_framework = SimCLR(temperature=temperature)
+        self.projection_head = ProjectionHead(num_classes, 128)
+
 
         self.self_supervised_learning = SelfSupervisedLearning(self.simclr_framework, self.data_augmentation, self.projection_head)
         self.ensemble_classifier = EnsembleClassifier(num_classifiers, self.base_classifier, num_classes=self.num_classes)
 
+    # Modify the train method to return the required metrics
     def train(self, data_loader, device, epochs, learning_rate, weight_decay):
         """
         Train the advanced classification model using the ensemble of classifiers.
@@ -40,24 +44,35 @@ class AdvancedClassificationModel:
 
         Output:
         @return - None
-        
         """
         # Pretrain using self-supervised learning
-        model = resnet18(pretrained=False, num_classes=10)
+        model = resnet101(pretrained=False, num_classes=10)
+
+        # Enable multi-GPU training
+        if torch.cuda.device_count() > 1:
+            print(f"Using {torch.cuda.device_count()} GPUs for training.")
+            model = nn.DataParallel(model)
+
+        model = model.to(device)
+        self.projection_head = self.projection_head.to(device)
+
         optimizer = optim.Adam(list(model.parameters()) + list(self.projection_head.parameters()), lr=3e-4)
 
         print("Starting self-supervised pretraining...")
         for epoch in range(epochs):
             print(f"Epoch {epoch + 1}/{epochs}")
-            self.self_supervised_learning.pretrain(self.base_classifier, data_loader, device, 1, optimizer)
+            metrics = self.self_supervised_learning.pretrain(self.base_classifier, data_loader, device, 1, optimizer)
+            print(f"Loss: {metrics['loss']}, Accuracy: {metrics['accuracy']}, MSE: {metrics['mse']}")
         print("Self-supervised pretraining completed.")
 
         # Train the ensemble of classifiers
         print("Starting ensemble classifier training...")
         for epoch in range(epochs):
             print(f"Epoch {epoch + 1}/{epochs}")
-            self.ensemble_classifier.train(data_loader, device, 1, learning_rate, weight_decay)
+            metrics = self.ensemble_classifier.train(data_loader, device, 1, learning_rate, weight_decay)
+            print(f"Loss: {metrics['loss']}, Accuracy: {metrics['accuracy']}, MSE: {metrics['mse']}")
         print("Ensemble classifier training completed.")
+
 
 
     def predict(self, data):
