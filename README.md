@@ -40,4 +40,4 @@ Customize the model architecture, data augmentation strategies, self-supervised 
 You may need to adjust the model architecture, data augmentation strategies, self-supervised learning framework, and adaptive training strategies depending on your specific requirements and dataset. Please refer to the respective class implementations and modify them as needed.
 
 # 📄 License
-This project is released under the LICENCE.
+This project is released under the MIT LICENCE.
